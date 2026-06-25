@@ -47,8 +47,8 @@ jobs:
         uses: actions/download-artifact@v8
       - name: List artifacts
         run: ls -R
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            artifacts/*.whl
+      - name: Create a GitHub release
+        if: startsWith(github.ref, 'refs/tags')
+        run: gh release create --generate-notes "${GITHUB_REF#refs/tags/}" artifacts*/*.whl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
