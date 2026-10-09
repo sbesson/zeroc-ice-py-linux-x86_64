@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version:
+        python-version:
           - 'cp310-cp310'
           - 'cp311-cp311'
           - 'cp312-cp312'
@@ -29,9 +29,9 @@ jobs:
           curl -J -O -L 'https://pypi.io/packages/source/z/zeroc-ice/zeroc-ice-3.6.5.tar.gz'
           tar zxf zeroc-ice-3.6.5.tar.gz
           for f in patches/*; do patch -p0 < ${f}; done
-          docker run --rm -v $PWD/zeroc-ice-3.6.5:/build builder /bin/bash -c "cd /build ; /opt/python/${{ matrix.version }}/bin/python setup.py build -j 3"
-          docker run --rm -v $PWD/zeroc-ice-3.6.5:/build builder /bin/bash -c "cd /build ; /opt/python/${{ matrix.version }}/bin/python setup.py bdist_wheel"
-          docker run --rm -v $PWD/zeroc-ice-3.6.5:/build builder auditwheel repair --only-plat --plat 'manylinux_2_28_x86_64' -w /build/dist /build/dist/zeroc_ice-3.6.5-${{ matrix.version }}-linux_x86_64.whl
+          docker run --rm -v $PWD/zeroc-ice-3.6.5:/build builder /bin/bash -c "cd /build ; /opt/python/${{ matrix.python-version }}/bin/python setup.py build -j 3"
+          docker run --rm -v $PWD/zeroc-ice-3.6.5:/build builder /bin/bash -c "cd /build ; /opt/python/${{ matrix.python-version }}/bin/python setup.py bdist_wheel"
+          docker run --rm -v $PWD/zeroc-ice-3.6.5:/build builder auditwheel repair --only-plat --plat 'manylinux_2_28_x86_64' -w /build/dist /build/dist/zeroc_ice-3.6.5-${{ matrix.python-version }}-linux_x86_64.whl
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
