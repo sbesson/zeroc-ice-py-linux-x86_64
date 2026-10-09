@@ -35,7 +35,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: artifacts-${{ matrix.version }}
+          name: artifacts-${{ matrix.python-version }}
           path: zeroc-ice-3.6.5/dist/*manylinux*.whl
           if-no-files-found: error
   release:
